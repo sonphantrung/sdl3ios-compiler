@@ -17,7 +17,7 @@ jobs:
           git clone --branch release-3.2.0 --depth=1 https://github.com/libsdl-org/SDL
           cd SDL/Xcode/SDL
           xcodebuild -list -project SDL.xcodeproj
-          xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "Static Library-iOS" -sdk "iphoneos" build \
+          xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "SDL3" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
                   RUN_CLANG_STATIC_ANALYZER=NO \
@@ -71,7 +71,4 @@ jobs:
         with:
           name: sdl2ios
           path: |
-            ${{env.IMAGE}}
-            ${{env.TTF}}
-            ${{env.MIXER}}
-            SDL/Xcode/SDL/build/SDL/libSDL3.a
+            SDL/Xcode/SDL/build/SDL/
