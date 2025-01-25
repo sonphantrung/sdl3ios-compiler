@@ -16,6 +16,7 @@ jobs:
         run: |
           git clone --branch release-3.2.0 --depth=1 https://github.com/libsdl-org/SDL
           cd SDL/Xcode/SDL
+          xcodebuild -list -project SDL.xcodeproj
           xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "Static Library-iOS" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
