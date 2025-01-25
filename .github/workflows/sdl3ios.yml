@@ -1,4 +1,4 @@
-name: SDL2 (iOS) Compiler
+name: SDL3 (iOS) Compiler
 on:
   push:
     branches: [main]
@@ -6,7 +6,7 @@ on:
 
 jobs:
   ios-comp:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1.4.1
