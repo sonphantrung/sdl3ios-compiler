@@ -1,0 +1,76 @@
+name: SDL2 (iOS) Compiler
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ios-comp:
+    runs-on: macos-13
+    steps:
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.4.1
+        with:
+          xcode-version: 14.3.1
+      - name: Build SDL
+        run: |
+          git clone --branch release-3.2.0 --depth=1 https://github.com/libsdl-org/SDL
+          cd SDL/Xcode/SDL
+          xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "Static Library-iOS" -sdk "iphoneos" build \
+                  ONLY_ACTIVE_ARCH=NO \
+                  IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+                  RUN_CLANG_STATIC_ANALYZER=NO \
+                  BUILD_DIR="build/SDL" \
+                  SYMROOT="build/SDL" \
+                  OBJROOT="build/SDL/obj" \
+                  BUILD_ROOT="build/SDL" \
+                  TARGET_BUILD_DIR="build/SDL"
+          cd ../../..
+          git clone --branch release-2.8.0 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_mixer
+          cd SDL_mixer/Xcode
+          xcrun xcodebuild -configuration "Release" -project SDL_mixer.xcodeproj -target "Static Library" -sdk "iphoneos" build \
+                  ONLY_ACTIVE_ARCH=NO \
+                  IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+                  RUN_CLANG_STATIC_ANALYZER=NO \
+                  BUILD_DIR="build/SDL_mixer" \
+                  SYMROOT="build/SDL_mixer" \
+                  OBJROOT="build/SDL_mixer/obj" \
+                  BUILD_ROOT="build/SDL_mixer" \
+                  TARGET_BUILD_DIR="build/SDL_mixer"
+          cd ../../
+          git clone --branch release-2.22.0 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_ttf
+          cd SDL_ttf/Xcode
+          xcrun xcodebuild -configuration "Release" -project SDL_ttf.xcodeproj -target "Static Library" -sdk "iphoneos" build \
+                  ONLY_ACTIVE_ARCH=NO \
+                  IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+                  RUN_CLANG_STATIC_ANALYZER=NO \
+                  BUILD_DIR="build/SDL_ttf" \
+                  SYMROOT="build/SDL_ttf" \
+                  OBJROOT="build/SDL_ttf/obj" \
+                  BUILD_ROOT="build/SDL_ttf" \
+                  TARGET_BUILD_DIR="build/SDL_ttf"
+          cd ../../
+          git clone --branch release-2.8.2 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_image
+          cd SDL_image/Xcode
+          xcrun xcodebuild -configuration "Release" -project SDL_image.xcodeproj -target "Static Library" -sdk "iphoneos" build \
+                  ONLY_ACTIVE_ARCH=NO \
+                  IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+                  RUN_CLANG_STATIC_ANALYZER=NO \
+                  BUILD_DIR="build/SDL_image" \
+                  SYMROOT="build/SDL_image" \
+                  OBJROOT="build/SDL_image/obj" \
+                  BUILD_ROOT="build/SDL_image" \
+                  TARGET_BUILD_DIR="build/SDL_image"
+      - name: Check dir
+        run: |
+          echo "IMAGE=$(find . -name libSDL2_image.a)" >> $GITHUB_ENV
+          echo "TTF=$(find . -name libSDL2_ttf.a)" >> $GITHUB_ENV
+          echo "MIXER=$(find . -name libSDL2_mixer.a)" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdl2ios
+          path: |
+            ${{env.IMAGE}}
+            ${{env.TTF}}
+            ${{env.MIXER}}
+            SDL/Xcode/SDL/build/SDL/libSDL3.a
