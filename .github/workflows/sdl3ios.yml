@@ -16,7 +16,6 @@ jobs:
         run: |
           git clone --branch release-3.2.10 --depth=1 https://github.com/libsdl-org/SDL
           cd SDL/Xcode/SDL
-          xcodebuild -list -project SDL.xcodeproj
           xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "SDL3.xcframework" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
@@ -42,7 +41,7 @@ jobs:
           git clone --branch release-3.2.2 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_ttf
           cd SDL_ttf/Xcode
           xcodebuild -list -project SDL_ttf.xcodeproj
-          xcrun xcodebuild -configuration "Release" -project SDL_ttf.xcodeproj -target "Static Library" -sdk "iphoneos" build \
+          xcrun xcodebuild -configuration "Release" -project SDL_ttf.xcodeproj -target "SDL3_ttf.xcframework" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
                   RUN_CLANG_STATIC_ANALYZER=NO \
@@ -54,7 +53,7 @@ jobs:
           cd ../../
           git clone --branch release-3.2.4 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_image
           cd SDL_image/Xcode
-          xcrun xcodebuild -configuration "Release" -project SDL_image.xcodeproj -target "Static Library" -sdk "iphoneos" build \
+          xcrun xcodebuild -configuration "Release" -project SDL_image.xcodeproj -target "SDL3_image.xcframework -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
                   RUN_CLANG_STATIC_ANALYZER=NO \
@@ -68,3 +67,6 @@ jobs:
           name: sdl2ios
           path: |
             SDL/Xcode/SDL/build/SDL/
+            SDL_ttf/Xcode/build/SDL_ttf/
+            SDL_image/Xcode/build/SDL_image/
+
