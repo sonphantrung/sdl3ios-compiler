@@ -14,10 +14,8 @@ jobs:
           xcode-version: 14.3.1
       - name: Build SDL
         run: |
-          git clone --branch release-3.2.0 --depth=1 https://github.com/libsdl-org/SDL
-          cd SDL/
-          curl -L https://github.com/slouken/SDL/commit/9790565b51074e2d073b0d05d5b0628307865331.patch | patch -p1
-          cd Xcode/SDL
+          git clone --branch release-3.2.10 --depth=1 https://github.com/libsdl-org/SDL
+          cd SDL/Xcode/SDL
           xcodebuild -list -project SDL.xcodeproj
           xcrun xcodebuild -configuration "Release" -project SDL.xcodeproj -target "SDL3.xcframework" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
@@ -41,8 +39,9 @@ jobs:
                   BUILD_ROOT="build/SDL_mixer" \
                   TARGET_BUILD_DIR="build/SDL_mixer"
           cd ../../
-          git clone --branch release-2.22.0 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_ttf
+          git clone --branch release-3.2.2 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_ttf
           cd SDL_ttf/Xcode
+          xcodebuild -list -project SDL.xcodeproj
           xcrun xcodebuild -configuration "Release" -project SDL_ttf.xcodeproj -target "Static Library" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
@@ -53,7 +52,7 @@ jobs:
                   BUILD_ROOT="build/SDL_ttf" \
                   TARGET_BUILD_DIR="build/SDL_ttf"
           cd ../../
-          git clone --branch release-2.8.2 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_image
+          git clone --branch release-3.2.4 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_image
           cd SDL_image/Xcode
           xcrun xcodebuild -configuration "Release" -project SDL_image.xcodeproj -target "Static Library" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
@@ -64,11 +63,6 @@ jobs:
                   OBJROOT="build/SDL_image/obj" \
                   BUILD_ROOT="build/SDL_image" \
                   TARGET_BUILD_DIR="build/SDL_image"
-      - name: Check dir
-        run: |
-          echo "IMAGE=$(find . -name libSDL2_image.a)" >> $GITHUB_ENV
-          echo "TTF=$(find . -name libSDL2_ttf.a)" >> $GITHUB_ENV
-          echo "MIXER=$(find . -name libSDL2_mixer.a)" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
           name: sdl2ios
