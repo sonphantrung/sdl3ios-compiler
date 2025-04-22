@@ -41,7 +41,7 @@ jobs:
           cd ../../
           git clone --branch release-3.2.2 --depth=1 --recurse-submodules https://github.com/libsdl-org/SDL_ttf
           cd SDL_ttf/Xcode
-          xcodebuild -list -project SDL.xcodeproj
+          xcodebuild -list -project SDL_ttf.xcodeproj
           xcrun xcodebuild -configuration "Release" -project SDL_ttf.xcodeproj -target "Static Library" -sdk "iphoneos" build \
                   ONLY_ACTIVE_ARCH=NO \
                   IPHONEOS_DEPLOYMENT_TARGET=15.0 \
